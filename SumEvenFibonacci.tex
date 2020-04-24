@@ -113,7 +113,7 @@ This paper was inspired by Problem 2 of Project Euler, which is restated below f
 
 The typical method of solving Problem 2 would be to write a program that generates all Fibonacci numbers under four million, finds the ones that are even, and sums those numbers. While this is an acceptable, quick, and elegant method, the problem can actually be solved algebraically in its entirety. This paper explores this purely mathematical method.\par
 To that end, this paper will begin by discussing and proving a couple of properties of the even Fibonacci numbers. Next, it will use Markov chains to simultaneously\footnote{Flex.} derive closed-form expressions for the $n^\text{th}$ even Fibonacci number and the sum of the first $n$ even Fibonacci numbers. The summation equation is evidently useful, but the $n^\text{th}$ term equation on its own will not help to solve Problem 2. However, its inverse (which takes in a Fibonacci number and returns $n$) can be used to determine how many even Fibonacci numbers there are below a certain upper bound (four million, per se).\par
-With an expression capable of finding the number $n$ of even Fibonacci numbers beneath four million and another capable of summing the first $n$ even Fibonacci numbers, all that is left is to combine the two results, solving Problem 2. As a final touch, the results will be implemented in Python.
+With an expression capable of finding the number $n$ of even Fibonacci numbers beneath four million and another capable of summing the first $n$ even Fibonacci numbers, all that is left is to combine the two results, solving Problem 2. As a final touch, the results will be implemented in Python (executes in $O(1)$ time).
 \newpage
 
 

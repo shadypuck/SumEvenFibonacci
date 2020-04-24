@@ -26,7 +26,6 @@
     language=Python,
     basicstyle=\ttfamily\small,
     keywordstyle=\mdseries\color{eminence},
-    morekeywords={False},
     emph={return},emphstyle=\color{eminence},
     emph={[2]sumEvenFibonaccisBeneath},emphstyle={[2]\color{blue!50!black}},
     emph={[3]int},emphstyle={[3]\color{green!70!blue}},
@@ -113,8 +112,8 @@ This paper was inspired by Problem 2 of Project Euler, which is restated below f
 \end{prob}
 
 The typical method of solving Problem 2 would be to write a program that generates all Fibonacci numbers under four million, finds the ones that are even, and sums those numbers. While this is an acceptable, quick, and elegant method, the problem can actually be solved algebraically in its entirety. This paper explores this purely mathematical method.\par
-To this end, it will begin by discussing and proving a couple of properties of the even Fibonacci numbers. Next, it will use Markov chains to simultaneously derive a closed-form expression for the $n^\text{th}$ even Fibonacci number and a closed-form expression for the sum of the first $n$ even Fibonacci numbers. The summation equation is evidently useful, but the $n^\text{th}$ term equation on its own will not help to solve Problem 2. However, its inverse (which takes in a Fibonacci number and returns $n$) can be used to determine how many even Fibonacci numbers there are below a certain upper bound (four million, per se).\par
-With an expression capable of finding the number $n$ of even Fibonacci numbers beneath four million and another capable of summing the first $n$ Fibonacci numbers, all that is left is to combine the two results, solving Problem 2. As a final touch, the results will be implemented in Python.
+To that end, this paper will begin by discussing and proving a couple of properties of the even Fibonacci numbers. Next, it will use Markov chains to simultaneously\footnote{Flex.} derive closed-form expressions for the $n^\text{th}$ even Fibonacci number and the sum of the first $n$ even Fibonacci numbers. The summation equation is evidently useful, but the $n^\text{th}$ term equation on its own will not help to solve Problem 2. However, its inverse (which takes in a Fibonacci number and returns $n$) can be used to determine how many even Fibonacci numbers there are below a certain upper bound (four million, per se).\par
+With an expression capable of finding the number $n$ of even Fibonacci numbers beneath four million and another capable of summing the first $n$ even Fibonacci numbers, all that is left is to combine the two results, solving Problem 2. As a final touch, the results will be implemented in Python.
 \newpage
 
 
@@ -128,13 +127,13 @@ The Fibonacci sequence begins as follows.
 From these first 12 terms, one might suspect that every third term is even (based on the fact that 2, 8, 34, and 144 are even), all others being odd. However, to do one better, this will be proved.\par
 This proof considers the following three postulates to be self-evident.
 \begin{postulate}{pst:oddodd}
-    The sum of two odd numbers is an even number.
+    The sum of two odd integers is even.
 \end{postulate}
 \begin{postulate}{pst:eveneven}
-    The sum of two even numbers is an even number.
+    The sum of two even integers is even.
 \end{postulate}
 \begin{postulate}{pst:oddeven}
-    The sum of an odd number and an even number is an odd number.
+    The sum of an odd integer and an even integer is odd.
 \end{postulate}\\
 \medskip
 
@@ -187,10 +186,10 @@ The initial conditions are given by the following.
 
 
 
-\section{Formula for the Even Fibonacci Numbers and Their Sum}
+\section{Formulas for the Even Fibonacci Numbers and Their Sum}
 \subsection{Even Fibonacci Numbers and Their Sum in Terms of \emph{n}}
-In the same way that Binet's formula is is a closed-form expression for the Fibonacci sequence, there exists a closed-form expression for the even Fibonacci sequence. Similarly, there exists a closed-form expression for the sum of the even Fibonacci sequence. Through the beauty of Markov chains, both can be derived simultaneously.\par
-Before beginning, a note on notation: From here on out, $e_n$ refers to the $n^\text{th}$ term in the even Fibonacci sequence, where 2 is the $0^\text{th}$ term. Likewise, $s_n$ refers to the sum of the first $n$ terms in the even Fibonacci sequence. Additionally, $E_n$ refers to a vector in the following form.
+In the same way that Binet's formula is a closed-form expression for the Fibonacci sequence, there exists a closed-form expression for the even Fibonacci sequence. Similarly, there exists a closed-form expression for the sum of the even Fibonacci sequence. Through the beauty of Markov chains, both can be derived simultaneously.\par
+Before beginning, a note on notation: From here on out, $e_n$ refers to the $n^\text{th}$ term in the even Fibonacci sequence, where 2 is the $0^\text{th}$ term. Likewise, $s_n$ refers to the sum of all terms through the $n^\text{th}$ term in the even Fibonacci sequence. Additionally, $E_n$ refers to a vector in the following form.
 \begin{equation*}
     E_n =
     \begin{bmatrix}
@@ -259,7 +258,11 @@ Manipulate the above equation as follows to find $E$.
         \end{bmatrix}
     }_{E_{n-1}}
 \end{align*}\par
-The equation $E_n=EE_{n-1}$ coupled with the above $E_1$ vector relatively defines the Markov chain specific to the even Fibonacci numbers. To define the Markov chain absolutely, it is necessary to use the equation$$E_n=E^{n-1}E_1$$From this equation, the sought-after explicit formula can be found.\par
+The equation $E_n=EE_{n-1}$ relatively defines the Markov chain specific to the even Fibonacci numbers. Coupled with the above $E_1$ vector, it can be modified to define the Markov chain absolutely as follows.
+\begin{equation*}
+    E_n = E^{n-1}E_1
+\end{equation*}
+From this equation, the sought-after explicit formulas can be found.\par
 To facilitate raising $E$ to a power, diagonalize it. Begin by finding the eigenvalues $\lambda_1$, $\lambda_2$, and $\lambda_3$.
 \begin{align*}
     0 &=
@@ -288,7 +291,7 @@ To facilitate raising $E$ to a power, diagonalize it. Begin by finding the eigen
         &= 2+\sqrt{5}&
             &= 2-\sqrt{5}
 \end{align*}
-Next, find the eigenvectors $x_1$, $x_2$, and $x_3$.
+Next, find the eigenvectors $x_1$, $x_2$, and $x_3$ (the author did so by inspection).
 \begin{align*}
     0 &= (E-\lambda_1I)x_1\\
     \begin{bmatrix}
@@ -298,8 +301,8 @@ Next, find the eigenvectors $x_1$, $x_2$, and $x_3$.
     \end{bmatrix}
     &=
     \begin{bmatrix}
-        0 & 4 & 1\\
-        0 & 2 & 1\\
+        1-1 & 4 & 1\\
+        0 & 4-1 & 1\\
         0 & 1 & -1\\
     \end{bmatrix}
     \begin{bmatrix}
@@ -310,7 +313,7 @@ Next, find the eigenvectors $x_1$, $x_2$, and $x_3$.
     &=
     \begin{bmatrix}
         0 & 4 & 1\\
-        0 & 2 & 1\\
+        0 & 3 & 1\\
         0 & 1 & -1\\
     \end{bmatrix}
     \begin{bmatrix}
@@ -470,16 +473,16 @@ Aided by the diagonalization, it is now possible to determine an explicit formul
     \end{bmatrix}
 \end{align*}
 \endgroup
-The uppermost value in $E_n$ will correspond to an explicit formula for $s_n$ and the middle value in $E_n$ will correspond to an explicit formula for $e_n$, as desired. The results are transcribed below for clarity.
+The uppermost value in $E_n$ corresponds to an explicit formula for $s_n$, and the middle value in $E_n$ corresponds to an explicit formula for $e_n$, as desired. The results are transcribed below for clarity.
 \begin{equation}\label{eqn:s_n}
-    s_n = \frac{1}{20}\left( (5-\sqrt{5})(2+\sqrt{5})^{n+2}+(5+\sqrt{5})(2-\sqrt{5})^{n+2}-10 \right)
+    s_n = \frac{1}{20}\left( \left( 5-\sqrt{5} \right)\left( 2+\sqrt{5} \right)^{n+2}+\left( 5+\sqrt{5} \right)\left( 2-\sqrt{5} \right)^{n+2}-10 \right)
 \end{equation}
 \begin{equation}\label{eqn:e_n}
-    e_n = \frac{1}{\sqrt{5}}\left( (2+\sqrt{5})^{n+1}-(2-\sqrt{5})^{n+1} \right)
+    e_n = \frac{1}{\sqrt{5}}\left( \left( 2+\sqrt{5} \right)^{n+1}-\left( 2-\sqrt{5} \right)^{n+1} \right)
 \end{equation}
 
 
-\subsection{\emph{n} in Terms of Even Fibonacci Numbers}
+\subsection{\emph{n} in Terms of an Even Fibonacci Number}
 This section looks to solve for $n$ in Equation \ref{eqn:e_n}. This is not entirely possible, but a workable-enough solution can be found to suit the purpose of solving Problem 2.\par
 In Equation \ref{eqn:e_n}, there are two different bases being raised to exponents. The first step is to express one in terms of the other. This can be accomplished as follows.
 \begin{align*}
@@ -505,7 +508,7 @@ Use the quadratic formula to solve for $\gamma^{n+1}$.
     \gamma^{n+1} &= \frac{-(-e_n\sqrt{5})\pm\sqrt{(-e_n\sqrt{5})^2-4(1)(-(-1)^{n+1})}}{2(1)}\\
     &= \frac{e_n\sqrt{5}\pm\sqrt{5e_n^2+4(-1)^{n+1}}}{2}
 \end{align*}
-$(-1)^{n+1}$ will never have a greater magnitude than 1 (although it will be complex for some values of $n$). This implies that the true value of the $4(-1)^{n+1}$ term lies somewhere in the range $[-4,4]$. With a value as large as $e_n=4000000$, this term will hardly matter. However, because Problem 2 necessitates that this function return an upper bound, 4 (the largest value in $[-4,4]$) will be set as the permanent value.
+$(-1)^{n+1}$ will never have a greater magnitude than 1 (although it will be complex for some values of $n$). This implies that the true value of the $4(-1)^{n+1}$ term lies somewhere in the range $[-4,4]$. With a value as large as $e_n=4000000$, this term will hardly matter. However, because Problem 2 necessitates that this function return an upper bound, 4 (the largest value in $[-4,4]$) will be set as the permanent value\footnote{Note that this approximation may cause this method to run into trouble when $e_n$ is very close to an actual even Fibonacci number. For example, if $e_n$ is just lower in value than an even Fibonacci number, the formula may include that even Fibonacci number in the sum even though it shouldn't.}.
 \begin{equation*}
     \gamma^{n+1} = \frac{e_n\sqrt{5}\pm\sqrt{5e_n^2+4}}{2}
 \end{equation*}
@@ -515,7 +518,7 @@ Use logarithms to solve for $n$.
     n+1 &= \log_\gamma\left( \frac{e_n\sqrt{5}\pm\sqrt{5e_n^2+4}}{2} \right)\\
     n &= \log_\gamma\left( \frac{e_n\sqrt{5}\pm\sqrt{5e_n^2+4}}{2} \right)-1
 \end{align*}
-Because $n$ must be positive, disregard the negative solution to the quadratic. Return the substitution for $\gamma$.
+Because $n$ must be positive, disregard the negative solution to the quadratic. Also return the substitution for $\gamma$\footnote{Note that for many large values of $e_n$, calculations could be simplified without affecting the significance of the output by ignoring the $+4$ term under the radical. If said term is ignored (which makes sense because as $e_n$ increases, $\sqrt{5e_n^2+4}$ increasingly behaves like $\sqrt{5e_n^2}$ --- formally, $\lim_{e_n\to\infty}\frac{\sqrt{5e_n^2+4}}{\sqrt{5e_n^2}}=1$), then the argument of the the logarithm algebraically reduces to just $e_n\sqrt{5}$.}.
 \begin{equation}\label{eqn:n}
     n = \log_{2+\sqrt{5}}\left( \frac{e_n\sqrt{5}+\sqrt{5e_n^2+4}}{2} \right)-1
 \end{equation}
